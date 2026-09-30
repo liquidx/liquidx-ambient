@@ -1,0 +1,161 @@
+:root {
+  --bg: #f7f6f2;
+  --fg: #1c1c1e;
+  --muted: #86857f;
+  --faint: #cfcdc6;
+  --accent: #e8720c;
+  --accent-fg: #ffffff;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+  user-select: none;
+}
+
+.ambient {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+  height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Portrait: stack the calendar above the clock. */
+@media (orientation: portrait) {
+  .ambient {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+.pane {
+  container-type: size;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Calendar ---------- */
+
+.calendar {
+  --pad: min(6cqw, 6cqh);
+  width: 100%;
+  height: 100%;
+  padding: var(--pad);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* header + weekday row + 6 week rows */
+  grid-template-rows: 1.5fr 0.8fr repeat(6, 1fr);
+  align-items: center;
+  justify-items: center;
+  font-variant-numeric: tabular-nums;
+  /* each cell is ~1/7 wide and ~1/9 tall */
+  font-size: min(5.5cqw, 7cqh);
+}
+
+/* Keep the calendar from stretching too wide on big landscape panes. */
+@container (min-aspect-ratio: 5/4) {
+  .calendar {
+    width: min(100%, 125cqh);
+  }
+}
+
+.cal-title {
+  grid-column: 1 / -1;
+  justify-self: start;
+  align-self: center;
+  padding-left: 0.35em;
+  font-size: 1.25em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.cal-title .year {
+  color: var(--muted);
+  font-weight: 400;
+  margin-left: 0.3em;
+}
+
+.cal-dow {
+  color: var(--muted);
+  font-size: 0.7em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cal-day {
+  display: grid;
+  place-items: center;
+  width: 1.9em;
+  height: 1.9em;
+  border-radius: 50%;
+}
+
+.cal-day.weekend {
+  color: var(--muted);
+}
+
+.cal-day.other {
+  color: var(--faint);
+}
+
+.cal-day.today {
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 700;
+}
+
+/* ---------- Clock ---------- */
+
+.clock {
+  display: flex;
+  align-items: baseline;
+  font-variant-numeric: tabular-nums;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  /* "00:00" is roughly 2.8em wide in tabular digits */
+  font-size: min(30cqw, 60cqh);
+}
+
+.clock .colon {
+  margin: 0 0.02em;
+  position: relative;
+  top: -0.06em;
+  color: var(--muted);
+}
+
+.clock .period {
+  margin-left: 0.15em;
+  font-size: 0.22em;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.clock.has-period {
+  font-size: min(25cqw, 55cqh);
+}
+
+/* Swapped via Up/Down arrow keys: clock first, calendar second. */
+.ambient.swapped .clock-pane {
+  order: -1;
+}

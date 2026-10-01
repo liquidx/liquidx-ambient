@@ -8,6 +8,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>Ambient</title>
+    <script>
+      // Set the theme before first paint so /dark doesn't flash light.
+      if (/^\/dark\/?$/.test(location.pathname)) {
+        document.documentElement.dataset.theme = "dark";
+        document.querySelector('meta[name="theme-color"]').content = "#0b0b0d";
+      }
+    </script>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
